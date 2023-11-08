@@ -77,11 +77,10 @@ async function getEmbeddingDimension(embeddingUrl: string, query: string) {
   // post request to embeddingUrl with query and return the dimension
   const res = await fetch(embeddingUrl, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' }, 
-    body: JSON.stringify({ query: query, embedding_model: "dashscope" }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query: query, embedding_model: 'dashscope' }),
   })
   console.log(res.ok, res.status, res.statusText)
   const data = await res.json()
-  console.log("data: ", data)
   return data.data
 }

@@ -29,11 +29,11 @@ const SearchPanel = () => {
     <Paper shadow="xs" px="lg" py="xs" mb="md" withBorder>
       <Grid align={'center'}>
         <Grid.Col span="content">
-          <Text size={'sm'}>Query by vectors:</Text>
+          <Text size={'sm'}>Query by string:</Text>
         </Grid.Col>
         <Grid.Col span="auto">
           <Input
-            placeholder="0.1, 0.2, 0.3, -0.1, -0.2, -0.3"
+            placeholder="your query string"
             value={queryValue}
             onChange={e => setQueryValue(e.currentTarget.value)}
           />

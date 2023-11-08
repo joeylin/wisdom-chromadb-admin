@@ -23,7 +23,7 @@ const RecordTable = ({ withQuery, recordsPage }: { withQuery: boolean; recordsPa
     <Table highlightOnHover layout={'fixed'}>
       <Table.Thead>
         <Table.Tr>
-          <Table.Th w={'48'}></Table.Th>
+          {/* <Table.Th w={'48'}></Table.Th> */}
           {withQuery && <Table.Th w={'10%'}>Distance</Table.Th>}
           <Table.Th w={'10%'}>ID</Table.Th>
           <Table.Th w={'40%'}>Document</Table.Th>
@@ -34,9 +34,9 @@ const RecordTable = ({ withQuery, recordsPage }: { withQuery: boolean; recordsPa
       <Table.Tbody>
         {recordsPage?.records.map(record => (
           <Table.Tr key={record.id} onClick={() => openDetailModal(record)}>
-            <Table.Td className={styles.td}>
+            {/* <Table.Td className={styles.td}>
               <RecordRowActionMenu embedding={record.embedding.join(', ')} />
-            </Table.Td>
+            </Table.Td> */}
             {withQuery && <Table.Td className={styles.td}>{record.distance}</Table.Td>}
             <Table.Td className={styles.td}>
               <Text span size={'sm'}>

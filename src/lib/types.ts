@@ -1,5 +1,6 @@
 export type AppConfig = {
   connectionString: string
+  embeddingUrl: string
   currentCollection: string
 }
 

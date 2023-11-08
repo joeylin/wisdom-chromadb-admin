@@ -29,12 +29,12 @@ export function useGetCollectionRecords(config?: AppConfig, collectionName?: str
     queryFn: async (): Promise<QueryResult> => {
       if (query === undefined || query === '') {
         const response = await fetch(
-          `/api/collections/${collectionName}/records?connectionString=${config?.connectionString}&page=${page}&query=${query}`
+          `/api/collections/${collectionName}/records?connectionString=${config?.connectionString}&embeddingUrl=${config?.embeddingUrl}&page=${page}&query=${query}`
         )
         return response.json()
       } else {
         const response = await fetch(
-          `/api/collections/${collectionName}/records?connectionString=${config?.connectionString}`,
+          `/api/collections/${collectionName}/records?connectionString=${config?.connectionString}&embeddingUrl=${config?.embeddingUrl}`,
           {
             method: 'POST',
             body: JSON.stringify({ query: query }),
@@ -43,6 +43,6 @@ export function useGetCollectionRecords(config?: AppConfig, collectionName?: str
         return response.json()
       }
     },
-    enabled: !!config?.connectionString,
+    enabled: !!config?.connectionString && !!config?.embeddingUrl,
   })
 }

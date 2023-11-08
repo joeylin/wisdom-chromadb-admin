@@ -6,23 +6,27 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Container, Title, Paper, TextInput, Group, Button } from '@mantine/core'
 
 import { useGetConfig } from '@/lib/client/query'
-import { updateConnectionString } from '@/lib/client/localstorage'
+import { updateConfigField } from '@/lib/client/localstorage'
 
 export default function SetupPage() {
   const router = useRouter()
   const { data: appConfig } = useGetConfig()
   const [connectionString, setConnectionString] = useState(appConfig?.connectionString || '')
+  const [embeddingUrl, setEmbeddingUrl] = useState(appConfig?.embeddingUrl || '')
 
   useEffect(() => {
     if (appConfig != null && appConfig.connectionString) {
       setConnectionString(appConfig.connectionString)
     }
+    if (appConfig != null && appConfig.embeddingUrl) {
+      setEmbeddingUrl(appConfig.embeddingUrl)
+    }
   }, [appConfig])
 
   const queryClient = useQueryClient()
   const connectButtonClicked = () => {
-    updateConnectionString(connectionString)
-    queryClient.setQueryData(['config'], { connectionString })
+    updateConfigField(connectionString, embeddingUrl)
+    queryClient.setQueryData(['config'], { connectionString, embeddingUrl })
     router.push('/collections')
   }
 
@@ -43,8 +47,15 @@ export default function SetupPage() {
           value={connectionString}
           onChange={e => setConnectionString(e.currentTarget.value)}
         />
+        <TextInput
+          label="Chroma embedding url"
+          description="For example, http://172.18.62.76:5001/api/v1/embedding"
+          placeholder="http://172.18.62.76:5001/api/v1/embedding"
+          value={embeddingUrl}
+          onChange={e => setEmbeddingUrl(e.currentTarget.value)}
+        />
         <Group mt="lg" justify="flex-end">
-          {appConfig?.connectionString && (
+          {appConfig?.connectionString && appConfig?.embeddingUrl && (
             <Button variant="default" onClick={backButtonClicked}>
               Back
             </Button>

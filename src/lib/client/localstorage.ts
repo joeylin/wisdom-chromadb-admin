@@ -7,7 +7,7 @@ export function getConfig(): AppConfig {
   if (config) {
     return JSON.parse(config)
   } else {
-    return { connectionString: '', currentCollection: '' }
+    return { connectionString: '', currentCollection: '', embeddingUrl: '' }
   }
 }
 
@@ -17,10 +17,21 @@ export function updateConfig(config: AppConfig) {
 }
 
 export function updateConnectionString(connectionString: string) {
-  const config = getConfig() || { connectionString: '', currentCollection: '' }
+  const config = getConfig() || { connectionString: '', currentCollection: '', embeddingUrl: '' }
   const newConfig = {
     ...config,
     connectionString,
   }
+  return updateConfig(newConfig)
+}
+
+export function updateConfigField(connectionString: string, embeddingUrl: string) {
+  const config = getConfig() || { connectionString: '', currentCollection: '', embeddingUrl: '' }
+  const newConfig = {
+    ...config,
+    connectionString,
+    embeddingUrl,
+  }
+  console.log(newConfig)
   return updateConfig(newConfig)
 }

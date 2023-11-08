@@ -20,9 +20,11 @@ export async function GET(request: Request, { params }: { params: { collectionNa
 // with query embeddings
 export async function POST(request: Request, { params }: { params: { collectionName: string } }) {
   const connectionString = extractConnectionString(request)
-  const queryEmbeddings = await extractQuery(request)
-
+  const query = await extractQuery(request)
+  const embeddingUrl = extractEmbeddingUrl(request)
+  console.log(embeddingUrl, connectionString, query)
   try {
+    const queryEmbeddings = await getEmbeddingDimension(embeddingUrl, query.toString())
     const data = await queryRecords(connectionString, params.collectionName, queryEmbeddings)
 
     return NextResponse.json({
@@ -34,6 +36,11 @@ export async function POST(request: Request, { params }: { params: { collectionN
         error:
           'Invalid dimension for query embeddings. Please provide embeddings with the same dimension as the collection.',
       })
+    } else {
+      console.log(error)
+      return NextResponse.json({
+        error: (error as Error).message,
+      })
     }
   }
 }
@@ -44,6 +51,12 @@ function extractConnectionString(request: Request) {
   return searchParams.get('connectionString') || ''
 }
 
+function extractEmbeddingUrl(request: Request) {
+  const url = new URL(request.url)
+  const searchParams = new URLSearchParams(url.search)
+  return searchParams.get('embeddingUrl') || ''
+}
+
 function extractPage(request: Request) {
   const url = new URL(request.url)
   const searchParams = new URLSearchParams(url.search)
@@ -52,5 +65,23 @@ function extractPage(request: Request) {
 
 async function extractQuery(request: Request) {
   const res = await request.json()
-  return res.query!.split(',').map((item: string) => parseFloat(item))
+  return res.query
+}
+
+// async function extractQuery(request: Request) {
+//   const res = await request.json()
+//   return res.query!.split(',').map((item: string) => parseFloat(item))
+// }
+
+async function getEmbeddingDimension(embeddingUrl: string, query: string) {
+  // post request to embeddingUrl with query and return the dimension
+  const res = await fetch(embeddingUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
+    body: JSON.stringify({ query: query, embedding_model: "dashscope" }),
+  })
+  console.log(res.ok, res.status, res.statusText)
+  const data = await res.json()
+  console.log("data: ", data)
+  return data.data
 }

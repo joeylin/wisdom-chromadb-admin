@@ -15,6 +15,9 @@ const SearchPanel = () => {
   }, [query])
 
   const queryButtonClicked = () => {
+    if (queryValue === '') {
+      return
+    }
     setQuery(queryValue)
     setCurrentPage(1)
   }

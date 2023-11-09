@@ -22,7 +22,6 @@ export async function POST(request: Request, { params }: { params: { collectionN
   const connectionString = extractConnectionString(request)
   const query = await extractQuery(request)
   const embeddingUrl = extractEmbeddingUrl(request)
-  console.log(embeddingUrl, connectionString, query)
   try {
     const queryEmbeddings = await getEmbeddingDimension(embeddingUrl, query.toString())
     const data = await queryRecords(connectionString, params.collectionName, queryEmbeddings)
